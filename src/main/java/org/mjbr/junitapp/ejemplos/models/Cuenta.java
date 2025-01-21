@@ -31,11 +31,12 @@ public class Cuenta {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj ==null)
+        if (!(obj instanceof Cuenta)) //instanceof: mala practica pero para efectos del curso, se está usando
             return false;
         Cuenta c = (Cuenta) obj;
-
-        
-        return super.equals(obj);
+        if (this.persona == null || this.saldo ==null) {
+            return false;
+        }
+        return this.persona.equals(c.getPersona()) && this.saldo.equals(c.getSaldo());
     }
 }
