@@ -100,7 +100,7 @@ class CuentaTest {
                 c.getPersona().equals("Andres")).findFirst().isPresent());
 
 
-        // la línea de arriba se puede reemplazar con anyMatch
+        // la línea 99 se puede reemplazar con anyMatch
         assertTrue(banco.getCuentas().stream().anyMatch(c ->
                 c.getPersona().equals("Andres")));
     }
