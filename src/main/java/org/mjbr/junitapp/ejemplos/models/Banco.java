@@ -30,8 +30,9 @@ public class Banco {
     }
 
 
-    public void addCuenta(Cuenta cuenta1) {
-        cuentas.add(cuenta1);
+    public void addCuenta(Cuenta cuenta) {
+        cuentas.add(cuenta);
+        cuenta.setBanco(this);
     }
 
     public List<Cuenta> getCuentas() {
