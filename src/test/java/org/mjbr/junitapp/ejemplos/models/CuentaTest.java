@@ -67,7 +67,8 @@ class CuentaTest {
         assertEquals(esperado, actual);
     }
 
-
+    @Test
+    void prueba1() {}
 
 
 }
