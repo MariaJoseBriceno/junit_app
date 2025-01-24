@@ -1,5 +1,7 @@
 package org.mjbr.junitapp.ejemplos.models;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mjbr.junitapp.ejemplos.exceptions.DineroInsuficienteException;
 
@@ -9,41 +11,92 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CuentaTest {
 
-    @Test
-    void testNombreCuenta() {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("10000.12345"));
-        //cuenta.setPersona("Andres");
-        String esperado = "Andres";
-        String real = cuenta.getPersona();
-        assertEquals(esperado, real);
-        assertNotNull(real);
-        assertTrue(real.equals("Andres"));
+    private Cuenta cuenta;
+
+    private String real;
+
+    @BeforeEach
+    void setUp() {
+         this.cuenta = new Cuenta("Andres", new BigDecimal("10000.12345"));
+         this.real = cuenta.getPersona();
+
     }
 
     @Test
+    @DisplayName("Nombre de cuenta correcto")
+    void testNombreCuentaOk() {
+        String esperado = "Andres";
+        assertAll(
+                () ->  assertEquals(esperado, real),
+                () -> assertNotNull(real),
+                () -> assertTrue(real.equals(esperado))); // Otra forma de probar assertEquals
+    }
+
+    @Test
+    @DisplayName("Nombre de cuenta diferente")
+    void testNombreCuentaNoOk() {
+        String esperado = "Juan";
+        assertAll(
+                () -> assertNotEquals(esperado, real),
+                () -> assertNotNull(real, () -> "El nombre de la cuenta es un valor nulo"),
+                () -> assertFalse(real.equals(esperado)) // otra forma de probar
+        );
+    }
+
+    @Test
+    @DisplayName("Nombre de cuenta no asignado")
+    void testNombreCuentaVacio() {
+        Cuenta cuenta1 = new Cuenta("", new BigDecimal("10000.12345"));
+        String real1 = cuenta1.getPersona();
+        System.out.println(real1);
+        String esperado = "";
+        assertAll(
+                () -> assertEquals(esperado, real1),
+                () -> assertNotNull(real1),
+                () -> assertTrue(real1.equals(esperado))
+    );
+    }
+
+    @Test
+    @DisplayName("Chequeo de saldo mayor que cero")
     void testSaldoCuenta() {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("10000.12345"));
-        assertNotNull(cuenta.getSaldo());
-        assertEquals(10000.12345, cuenta.getSaldo().doubleValue());
-        assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0); // el saldo tiene que ser  mayor que cero
-        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+        BigDecimal esperado = new BigDecimal("10000.12345");
+        assertAll(
+                () -> assertNotNull(cuenta.getSaldo()),
+                () -> assertEquals(esperado.doubleValue(), cuenta.getSaldo().doubleValue()),
+                () -> assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0), // el saldo tiene que ser  mayor que cero
+                () -> assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0)
+        );
+    }
+
+    @Test
+    @DisplayName("Chequeo de saldo igual a cero")
+    void testSaldoCuentaVacío() {
+        Cuenta cuenta1 = new Cuenta("", new BigDecimal("0"));
+        BigDecimal esperado = new BigDecimal("0");
+        assertAll(
+                () -> assertNotNull(cuenta1.getSaldo()),
+                () -> assertEquals(esperado.doubleValue(), cuenta1.getSaldo().doubleValue())
+        );
     }
 
 
     @Test
     void testReferenciaCuenta() {
-        Cuenta cuenta = new Cuenta("John Doe", new BigDecimal("8900.9997"));
+        Cuenta cuenta1 = new Cuenta("John Doe", new BigDecimal("8900.9997"));
         Cuenta cuenta2 = new Cuenta("John Doe", new BigDecimal("8900.9997"));
-        assertEquals(cuenta, cuenta2);
+        assertEquals(cuenta1, cuenta2);
     }
 
     @Test
     void testDebitoCuenta() {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000.12345"));
-        cuenta.debito(new BigDecimal(100));
-        assertNotNull(cuenta.getSaldo());
-        assertEquals(900,cuenta.getSaldo().intValue());
-        assertEquals("900.12345",cuenta.getSaldo().toPlainString());
+        Cuenta cuenta1 = new Cuenta("Andres", new BigDecimal("1000.12345"));
+        cuenta1.debito(new BigDecimal(100));
+        assertAll (
+                () -> assertNotNull(cuenta1.getSaldo()),
+                () -> assertEquals(900,cuenta1.getSaldo().intValue()),
+                () -> assertEquals("900.12345",cuenta1.getSaldo().toPlainString())
+        );
     }
 
     @Test
