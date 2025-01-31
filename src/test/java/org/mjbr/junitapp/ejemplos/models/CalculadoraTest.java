@@ -2,6 +2,7 @@ package org.mjbr.junitapp.ejemplos.models;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.mjbr.junitapp.ejemplos.exceptions.DineroInsuficienteException;
 import org.mjbr.junitapp.ejemplos.exceptions.DivisionPorCeroException;
 
@@ -35,6 +36,15 @@ class CalculadoraTest {
         String esperado = "Division por cero";
         assertEquals(esperado, actual);
 
+    }
+
+    @Test
+    @DisplayName("Prueba para la suma")
+    @EnabledIfEnvironmentVariable(named = "ENV", matches = "TEST")
+    void testSuma() {
+        Calculadora calc = new Calculadora();
+        double resultado = calc.sumar(2,3);
+        assertEquals(5, resultado, () -> "La suma entre 2 y 3 debe ser 5");
     }
 
 }
