@@ -1,8 +1,6 @@
 package org.mjbr.junitapp.ejemplos.models;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mjbr.junitapp.ejemplos.exceptions.DineroInsuficienteException;
 
 import java.math.BigDecimal;
@@ -19,7 +17,25 @@ class CuentaTest {
     void setUp() {
          this.cuenta = new Cuenta("Andres", new BigDecimal("10000.12345"));
          this.real = cuenta.getPersona();
+        System.out.println("Iniciando el test");
 
+    }
+
+    @AfterEach
+    void endTest() {
+        System.out.println("Terminando el test");
+
+    }
+
+    @BeforeAll
+    static void beforeAll() {
+        System.out.println("Iniciando la clase CuentaTest");
+    }
+
+
+    @AfterAll
+    static void afterAll() {
+        System.out.println("Terminando la clase CuentaTest");
     }
 
     @Test
