@@ -82,6 +82,7 @@ class CuentaTest {
 
 
     @Test
+    @DisplayName("Referencia a cuenta")
     void testReferenciaCuenta() {
         Cuenta cuenta1 = new Cuenta("John Doe", new BigDecimal("8900.9997"));
         Cuenta cuenta2 = new Cuenta("John Doe", new BigDecimal("8900.9997"));
@@ -89,6 +90,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Descuento en cuenta o debito cuenta")
     void testDebitoCuenta() {
         Cuenta cuenta1 = new Cuenta("Andres", new BigDecimal("1000.12345"));
         cuenta1.debito(new BigDecimal(100));
@@ -100,27 +102,32 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Ingreso de dinero a cuenta o crédito cuenta")
     void testCreditoCuenta() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000.12345"));
         cuenta.credito(new BigDecimal(100));
-        assertNotNull(cuenta.getSaldo());
-        assertEquals(1100, cuenta.getSaldo().intValue());
-        assertEquals("1100.12345", cuenta.getSaldo().toPlainString());
+        assertAll (
+                () -> assertNotNull(cuenta.getSaldo()),
+                () -> assertEquals(1100, cuenta.getSaldo().intValue()),
+                () -> assertEquals("1100.12345", cuenta.getSaldo().toPlainString())
+        );
+
     }
 
     @Test
+    @DisplayName("Probando la excepción cuando no hay suficiente dinero")
     void testDineroInsuficienteExceptionCuenta() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000.12345"));
         Exception exception = assertThrows(DineroInsuficienteException.class, () -> {
             cuenta.debito(new BigDecimal(1500));
         });
-
         String actual = exception.getMessage();
         String esperado = "Dinero Insuficiente";
         assertEquals(esperado, actual);
     }
 
     @Test
+    @DisplayName("Transferencia de dinero entre cuentas")
     void transferirDineroCuentas() {
         Cuenta cuenta1 = new Cuenta("Jhon Doe", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Andres", new BigDecimal("1500.8989"));
@@ -132,6 +139,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Relación entre cuentas")
     void  testRelacionCuentas() {
         Cuenta cuenta1 = new Cuenta("Jhon Doe", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Andres", new BigDecimal("1500.8989"));
@@ -159,6 +167,7 @@ class CuentaTest {
 
 
     @Test
+    @DisplayName("Relacion entre cuentas con funciones anónimas")
     void  testRelacionCuentasConFuncionesAnonimas() {
         Cuenta cuenta1 = new Cuenta("Jhon Doe", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Andres", new BigDecimal("1500.8989"));
